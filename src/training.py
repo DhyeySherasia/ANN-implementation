@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, '../src')
 from utils.common import read_config
 from utils.data_mgnt import get_data
+from utils.callbacks import get_callbacks
 from utils.model import create_model, save_model
 
 import argparse
@@ -23,7 +24,9 @@ def training(config_path):
     EPOCHS = config["params"]["epochs"]
     VALIDATION = (x_valid, y_valid)
 
-    history = model.fit(x_train, y_train, epochs=EPOCHS, validation_data=VALIDATION)
+    CALLBACK_LIST = get_callbacks(config, x_train)
+
+    history = model.fit(x_train, y_train, epochs=EPOCHS, validation_data=VALIDATION, callbacks=CALLBACK_LIST)
 
     artifacts_dir = config["artifacts"]["artifacts_dir"]
     model_dir = config["artifacts"]["model_dir"]
